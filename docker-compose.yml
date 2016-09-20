@@ -1,1 +1,53 @@
 version: "2"
+
+services:
+  web:
+    image: ifgi/origami-caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy-data:/etc/caddy/.caddy
+    volumes_from:
+      - origami-static
+      - api
+    networks:
+      - api-front
+    depends_on:
+      - api
+      - origami-static
+    restart: always
+  origami-static:
+    image: ifgi/origami
+  api:
+    image: ifgi/origami-api
+    networks:
+      - api-front
+      - api-back
+    depends_on:
+      - mongo
+    restart: always
+  mongo:
+    image: ifgi/origami-api-mongo
+    volumes:
+      - mongo-data:/data/db
+    command: --auth --storageEngine wiredTiger
+    networks:
+      - api-back
+    restart: always
+
+volumes:
+  mongo-data:
+    driver: local-persist
+    driveropts:
+      mountpoint: /dockervolumes/mongo-data
+  caddy-data:
+    driver: local-persist
+    driveropts:
+      mountpoint: /dockervolumes/caddy-data
+
+networks:
+  api-front:
+    driver: bridge
+  api-back:
+    driver: bridge
