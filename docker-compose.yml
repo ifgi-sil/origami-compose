@@ -4,23 +4,32 @@ services:
   web:
     image: ifgi/origami-caddy
     ports:
-      - "80:80"
+      - "80:2015"
       - "443:443"
+    environment:
+      - WEB_DOMAIN=localhost
+      - API_DOMAIN=localhost
+      - ISSUER_ADDRESS=off
+      - USE_STAGING_CA=true
     volumes:
       - caddy-data:/etc/caddy/.caddy
     volumes_from:
-      - origami-static
+   #   - origami-static
       - api
     networks:
       - api-front
     depends_on:
       - api
-      - origami-static
+    #  - origami-static
     restart: always
-  origami-static:
-    image: ifgi/origami
+  #origami-static:
+  #  image: ifgi/origami
   api:
-    image: ifgi/origami-api
+    image: ifgi/origami-backend
+    environment:
+      - origami_dbuser=mongodbOriGamiUser
+      - origami_dbuserpass=securePa$$
+      - origami_dbhost=mongo
     networks:
       - api-front
       - api-back
@@ -31,6 +40,9 @@ services:
     image: ifgi/origami-api-mongo
     volumes:
       - mongo-data:/data/db
+    environment:
+      - origami_dbuser=mongodbOSeMUser
+      - origami_dbuserpass=securePa$$
     command: --auth --storageEngine wiredTiger
     networks:
       - api-back
@@ -39,11 +51,11 @@ services:
 volumes:
   mongo-data:
     driver: local-persist
-    driveropts:
+    driver_opts:
       mountpoint: /dockervolumes/mongo-data
   caddy-data:
     driver: local-persist
-    driveropts:
+    driver_opts:
       mountpoint: /dockervolumes/caddy-data
 
 networks:
