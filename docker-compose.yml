@@ -8,7 +8,7 @@ services:
       - "443:443"
     environment:
       - WEB_DOMAIN=localhost
-      - API_DOMAIN=localhost
+      - API_DOMAIN=api.localhost
       - ISSUER_ADDRESS=off
       - USE_STAGING_CA=true
     volumes:
