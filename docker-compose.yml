@@ -27,22 +27,22 @@ services:
   api:
     image: ifgi/origami-backend
     environment:
-      - origami_dbuser=mongodbOriGamiUser
-      - origami_dbuserpass=securePa$$
-      - origami_dbhost=mongo
+      - origami_dbuser=admin
+      - origami_dbuserpass=admin
+      - origami_dbhost=db
     networks:
       - api-front
       - api-back
     depends_on:
-      - mongo
+      - db
     restart: always
-  mongo:
+  db:
     image: ifgi/origami-api-mongo
     volumes:
       - mongo-data:/data/db
     environment:
-      - origami_dbuser=mongodbOSeMUser
-      - origami_dbuserpass=securePa$$
+      - origami_dbuser=admin
+      - origami_dbuserpass=admin
     command: --auth --storageEngine wiredTiger
     networks:
       - api-back
