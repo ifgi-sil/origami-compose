@@ -14,16 +14,18 @@ services:
     volumes:
       - caddy-data:/etc/caddy/.caddy
     volumes_from:
-   #   - origami-static
+      - origami-static
       - api
     networks:
       - api-front
     depends_on:
       - api
-    #  - origami-static
+      - origami-static
     restart: always
-  #origami-static:
-  #  image: ifgi/origami
+  origami-static:
+    image: ifgi/origami
+    environment:
+      - API_URL=http://api.localhost
   api:
     image: ifgi/origami-backend
     environment:
