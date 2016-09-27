@@ -28,6 +28,8 @@ services:
       - API_URL=http://api.localhost
   api:
     image: ifgi/origami-backend
+    volumes:
+      - api-images:/usr/src/app/data
     environment:
       - origami_dbuser=admin
       - origami_dbuserpass=admin
@@ -51,6 +53,10 @@ services:
     restart: always
 
 volumes:
+  api-images:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /dockervolumes/api-images
   mongo-data:
     driver: local-persist
     driver_opts:
