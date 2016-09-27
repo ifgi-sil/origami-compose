@@ -4,13 +4,13 @@ services:
   web:
     image: ifgi/origami-caddy
     ports:
-      - "80:2015"
+      - "80:80"
       - "443:443"
     environment:
-      - WEB_DOMAIN=localhost
-      - API_DOMAIN=api.localhost
-      - ISSUER_ADDRESS=off
-      - USE_STAGING_CA=true
+      - WEB_DOMAIN=ori-gami.org
+      - API_DOMAIN=api.ori-gami.org
+      - ISSUER_ADDRESS=matthias.pfeil@uni-muenster.de
+      #- USE_STAGING_CA=false
     volumes:
       - caddy-data:/etc/caddy/.caddy
     volumes_from:
@@ -25,7 +25,7 @@ services:
   origami-static:
     image: ifgi/origami
     environment:
-      - API_URL=http://api.localhost
+      - API_URL=https://api.ori-gami.org
   api:
     image: ifgi/origami-backend
     volumes:
